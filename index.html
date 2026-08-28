@@ -117,6 +117,10 @@
     transition:all .12s;
   }
   .ampm-btn.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  .bp-picker{display:flex;align-items:center;gap:8px;}
+  .bp-picker input{width:80px;flex:none;text-align:center;}
+  .bp-slash{font-weight:700;color:var(--ink-soft);}
   .opt{
     flex:1;min-width:90px;position:relative;
   }
@@ -282,7 +286,14 @@
         <!-- ===== Stage 1：睡前填寫 ===== -->
         <div id="sl-stage1-fields" style="margin-top:18px;">
           <div class="grid2">
-            <label class="field"><span class="lbl">睡前血壓（收縮/舒張）</span><input type="text" id="sl-bp-before" placeholder="120/80"></label>
+            <label class="field">
+              <span class="lbl">睡前血壓（收縮/舒張）</span>
+              <div class="bp-picker">
+                <input type="number" id="sl-bp-before-sys" placeholder="120" min="0">
+                <span class="bp-slash">/</span>
+                <input type="number" id="sl-bp-before-dia" placeholder="80" min="0">
+              </div>
+            </label>
             <label class="field">
               <span class="lbl">睡前放鬆指數（華碩手錶數據）</span>
               <input type="number" id="sl-relax-before" placeholder="例：72">
@@ -328,7 +339,14 @@
           </div>
 
           <div class="grid2">
-            <label class="field"><span class="lbl">起床後血壓（收縮/舒張）</span><input type="text" id="sl-bp-after" placeholder="118/76"></label>
+            <label class="field">
+              <span class="lbl">起床後血壓（收縮/舒張）</span>
+              <div class="bp-picker">
+                <input type="number" id="sl-bp-after-sys" placeholder="118" min="0">
+                <span class="bp-slash">/</span>
+                <input type="number" id="sl-bp-after-dia" placeholder="76" min="0">
+              </div>
+            </label>
             <label class="field">
               <span class="lbl">起床後放鬆指數（華碩手錶數據）</span>
               <input type="number" id="sl-relax-after" placeholder="例：68">
@@ -725,14 +743,21 @@
   }
   loadMine();
 
+  function getBP(prefix){
+    const sys = $(prefix+'-sys').value;
+    const dia = $(prefix+'-dia').value;
+    if(sys === '' || dia === '') return '';
+    return sys + '/' + dia;
+  }
+
   function resetStage2Fields(){
-    ['sl-bp-after','sl-relax-after','sl-latency','sl-wakecount','sl-resleep-latency','sl-notes'].forEach(id=>$(id).value='');
+    ['sl-bp-after-sys','sl-bp-after-dia','sl-relax-after','sl-latency','sl-wakecount','sl-resleep-latency','sl-notes'].forEach(id=>$(id).value='');
     resetPicker('sl-waketime');
     $('sl-resleep-wrap').style.display = 'none';
     $('sl-worn').selectedIndex = 0; $('sl-quality').selectedIndex = 2; $('sl-recovery').selectedIndex = 2;
   }
   function resetStage1Fields(){
-    ['sl-bp-before','sl-relax-before'].forEach(id=>$(id).value='');
+    ['sl-bp-before-sys','sl-bp-before-dia','sl-relax-before'].forEach(id=>$(id).value='');
     resetPicker('sl-bedtime');
   }
 
@@ -782,7 +807,7 @@
     if(!date){ showMsg(msgEl,'請選擇日期','error'); return; }
 
     const fields = {
-      bpBefore: $('sl-bp-before').value.trim(),
+      bpBefore: getBP('sl-bp-before'),
       relaxBefore: $('sl-relax-before').value,
       bedtime: getPickerTime24('sl-bedtime')
     };
@@ -827,7 +852,7 @@
     const fields = {
       worn: $('sl-worn').value,
       waketime: getPickerTime24('sl-waketime'),
-      bpAfter: $('sl-bp-after').value.trim(),
+      bpAfter: getBP('sl-bp-after'),
       relaxAfter: $('sl-relax-after').value,
       latency: $('sl-latency').value,
       wakeCount: $('sl-wakecount').value,
