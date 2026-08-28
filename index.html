@@ -102,6 +102,21 @@
   }
   .stage-btn:hover{border-color:var(--teal);color:var(--ink);}
   .stage-btn.active{border-color:var(--ink);background:var(--ink);color:#fff;}
+
+  .time-picker{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .tp-select{
+    width:auto;min-width:64px;padding:10px 10px;border:1px solid var(--line);border-radius:9px;
+    font-family:var(--font-body);font-size:15px;font-weight:700;color:var(--ink);background:#fff;
+    text-align:center;
+  }
+  .tp-colon{font-weight:700;color:var(--ink-soft);}
+  .ampm-row{display:flex;gap:6px;margin-right:2px;}
+  .ampm-btn{
+    padding:9px 14px;border-radius:9px;border:1px solid var(--line);background:#fff;
+    font-family:var(--font-body);font-weight:700;font-size:13px;color:var(--ink-soft);cursor:pointer;
+    transition:all .12s;
+  }
+  .ampm-btn.active{background:var(--teal);border-color:var(--teal);color:#fff;}
   .opt{
     flex:1;min-width:90px;position:relative;
   }
@@ -273,7 +288,18 @@
               <input type="number" id="sl-relax-before" placeholder="例：72">
             </label>
           </div>
-          <label class="field"><span class="lbl">上床時間</span><input type="time" id="sl-bedtime"></label>
+          <div class="field">
+            <span class="lbl">上床時間</span>
+            <div class="time-picker" data-prefix="sl-bedtime">
+              <div class="ampm-row" data-prefix="sl-bedtime">
+                <button type="button" class="ampm-btn" data-period="AM">AM</button>
+                <button type="button" class="ampm-btn" data-period="PM">PM</button>
+              </div>
+              <select class="tp-select" id="sl-bedtime-hour"><option value="">時</option></select>
+              <span class="tp-colon">:</span>
+              <select class="tp-select" id="sl-bedtime-min"><option value="">分</option></select>
+            </div>
+          </div>
           <button class="btn" id="sl-submit-stage1">送出睡前紀錄</button>
         </div>
 
@@ -287,7 +313,18 @@
                 <option value="否">否，部分時間未穿著</option>
               </select>
             </label>
-            <label class="field"><span class="lbl">起床時間</span><input type="time" id="sl-waketime"></label>
+            <div class="field">
+              <span class="lbl">起床時間</span>
+              <div class="time-picker" data-prefix="sl-waketime">
+                <div class="ampm-row" data-prefix="sl-waketime">
+                  <button type="button" class="ampm-btn" data-period="AM">AM</button>
+                  <button type="button" class="ampm-btn" data-period="PM">PM</button>
+                </div>
+                <select class="tp-select" id="sl-waketime-hour"><option value="">時</option></select>
+                <span class="tp-colon">:</span>
+                <select class="tp-select" id="sl-waketime-min"><option value="">分</option></select>
+              </div>
+            </div>
           </div>
 
           <div class="grid2">
@@ -526,6 +563,50 @@
     selectedStage = null;
   }
 
+  // ---------- Tap-to-pick time widgets (上床/起床時間) ----------
+  function populateTimePicker(prefix){
+    const hourSel = $(prefix+'-hour');
+    const minSel = $(prefix+'-min');
+    for(let h=1; h<=12; h++){
+      const opt = document.createElement('option');
+      opt.value = String(h); opt.textContent = h+'點';
+      hourSel.appendChild(opt);
+    }
+    for(let m=0; m<60; m+=5){
+      const opt = document.createElement('option');
+      const mm = String(m).padStart(2,'0');
+      opt.value = mm; opt.textContent = mm+'分';
+      minSel.appendChild(opt);
+    }
+  }
+  ['sl-bedtime','sl-waketime'].forEach(populateTimePicker);
+
+  document.querySelectorAll('.ampm-row').forEach(row=>{
+    row.querySelectorAll('.ampm-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        row.querySelectorAll('.ampm-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
+
+  function getPickerTime24(prefix){
+    const h12 = $(prefix+'-hour').value;
+    const min = $(prefix+'-min').value;
+    const row = document.querySelector(`.ampm-row[data-prefix="${prefix}"]`);
+    const activeBtn = row ? row.querySelector('.ampm-btn.active') : null;
+    if(!h12 || min === '' || !activeBtn) return '';
+    let h = Number(h12) % 12;
+    if(activeBtn.dataset.period === 'PM') h += 12;
+    return String(h).padStart(2,'0') + ':' + min;
+  }
+  function resetPicker(prefix){
+    $(prefix+'-hour').value = '';
+    $(prefix+'-min').value = '';
+    const row = document.querySelector(`.ampm-row[data-prefix="${prefix}"]`);
+    if(row) row.querySelectorAll('.ampm-btn').forEach(b=>b.classList.remove('active'));
+  }
+
   function getISIBand(score){
     if(score<=7) return {label:'無臨床顯著失眠', color:'ok'};
     if(score<=14) return {label:'輕度失眠（閾下）', color:'warn'};
@@ -645,12 +726,14 @@
   loadMine();
 
   function resetStage2Fields(){
-    ['sl-bp-after','sl-relax-after','sl-latency','sl-wakecount','sl-resleep-latency','sl-notes','sl-waketime'].forEach(id=>$(id).value='');
+    ['sl-bp-after','sl-relax-after','sl-latency','sl-wakecount','sl-resleep-latency','sl-notes'].forEach(id=>$(id).value='');
+    resetPicker('sl-waketime');
     $('sl-resleep-wrap').style.display = 'none';
     $('sl-worn').selectedIndex = 0; $('sl-quality').selectedIndex = 2; $('sl-recovery').selectedIndex = 2;
   }
   function resetStage1Fields(){
-    ['sl-bp-before','sl-relax-before','sl-bedtime'].forEach(id=>$(id).value='');
+    ['sl-bp-before','sl-relax-before'].forEach(id=>$(id).value='');
+    resetPicker('sl-bedtime');
   }
 
   // ---- 查看今天填到哪裡了（純顯示狀態，不影響欄位是否顯示）----
@@ -701,7 +784,7 @@
     const fields = {
       bpBefore: $('sl-bp-before').value.trim(),
       relaxBefore: $('sl-relax-before').value,
-      bedtime: $('sl-bedtime').value
+      bedtime: getPickerTime24('sl-bedtime')
     };
 
     const btn = $('sl-submit-stage1');
@@ -743,7 +826,7 @@
 
     const fields = {
       worn: $('sl-worn').value,
-      waketime: $('sl-waketime').value,
+      waketime: getPickerTime24('sl-waketime'),
       bpAfter: $('sl-bp-after').value.trim(),
       relaxAfter: $('sl-relax-after').value,
       latency: $('sl-latency').value,
