@@ -35,11 +35,11 @@
   .hero h1{
     font-family:var(--font-display);
     font-weight:600;
-    font-size:clamp(22px,4vw,30px);
+    font-size:clamp(26.4px,4.8vw,36px);
     margin:0 0 6px;
     letter-spacing:.2px;
   }
-  .hero p{margin:0;color:#C3C8E8;font-size:14px;line-height:1.6;}
+  .hero p{margin:0;color:#C3C8E8;font-size:16.8px;line-height:1.6;}
   .wave{position:absolute;left:0;right:0;bottom:-1px;height:46px;}
   .wave svg{width:100%;height:100%;display:block;}
 
@@ -51,29 +51,29 @@
     margin-top:-30px;position:relative;z-index:2;
     box-shadow:0 8px 24px rgba(27,35,64,.12);
   }
-  .card h2{font-family:var(--font-display);font-size:19px;margin:0 0 4px;}
-  .card .sub{color:var(--ink-soft);font-size:13px;margin:0 0 18px;}
+  .card h2{font-family:var(--font-display);font-size:22.8px;margin:0 0 4px;}
+  .card .sub{color:var(--ink-soft);font-size:15.6px;margin:0 0 18px;}
 
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   @media(max-width:600px){.grid2{grid-template-columns:1fr;}}
 
   label.field{display:block;margin-bottom:14px;}
-  label.field span.lbl{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  label.field span.lbl{display:block;font-size:15.6px;font-weight:700;color:var(--ink);margin-bottom:6px;}
   input[type=text],input[type=date],textarea{
     width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;
-    font-family:var(--font-body);font-size:14px;color:var(--ink);background:#fff;
+    font-family:var(--font-body);font-size:16.8px;color:var(--ink);background:#fff;
   }
   textarea{resize:vertical;min-height:70px;}
   input:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:1px;}
 
   fieldset{border:1px solid var(--line);border-radius:10px;padding:14px 14px 8px;margin:0 0 14px;}
-  fieldset legend{font-size:13px;font-weight:700;padding:0 6px;color:var(--ink);}
+  fieldset legend{font-size:15.6px;font-weight:700;padding:0 6px;color:var(--ink);}
   .opt-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
   .opt{flex:1;min-width:90px;position:relative;}
   .opt input{position:absolute;opacity:0;}
   .opt label{
     display:block;text-align:center;padding:8px 6px;border-radius:8px;
-    border:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);cursor:pointer;
+    border:1px solid var(--line);font-size:15px;color:var(--ink-soft);cursor:pointer;
     transition:all .12s;
   }
   .opt input:checked + label{background:var(--ink);border-color:var(--ink);color:#fff;}
@@ -84,10 +84,13 @@
   .check input{position:absolute;opacity:0;}
   .check label{
     display:block;padding:10px 16px;border-radius:999px;
-    border:1px solid var(--line);font-size:13.5px;color:var(--ink-soft);cursor:pointer;
+    border:1px solid var(--line);font-size:16.2px;color:var(--ink-soft);cursor:pointer;
     transition:all .12s;
   }
-  .check input:checked + label{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .check input:checked + label{color:#fff;}
+  .check--1 input:checked + label{background:#4C9A8E;border-color:#4C9A8E;}
+  .check--2 input:checked + label{background:#E3A93B;border-color:#E3A93B;}
+  .check--3 input:checked + label{background:#B85C9E;border-color:#B85C9E;}
 
   .stage-row{display:flex;gap:12px;flex-wrap:wrap;}
   .stage-btn{
@@ -96,32 +99,32 @@
     font-family:var(--font-body);cursor:pointer;transition:all .15s;
     text-align:center;
   }
-  .stage-btn .stage-main{display:block;font-weight:700;font-size:14.5px;}
-  .stage-btn .stage-sub{display:block;font-size:11.5px;font-weight:500;margin-top:3px;opacity:.75;}
+  .stage-btn .stage-main{display:block;font-weight:700;font-size:17.4px;}
+  .stage-btn .stage-sub{display:block;font-size:13.8px;font-weight:500;margin-top:3px;opacity:.75;}
   .stage-btn:hover{border-color:var(--teal);color:var(--ink);}
   .stage-btn.active{border-color:var(--ink);background:var(--ink);color:#fff;}
 
   .btn{
     display:inline-flex;align-items:center;gap:8px;
     background:var(--ink);color:#fff;border:none;border-radius:10px;
-    padding:12px 22px;font-weight:700;font-size:14px;cursor:pointer;
+    padding:12px 22px;font-weight:700;font-size:16.8px;cursor:pointer;
     font-family:var(--font-body);
   }
   .btn:hover{background:#2A335C;}
   .btn:disabled{opacity:.6;cursor:not-allowed;}
 
-  .msg{padding:12px 14px;border-radius:9px;font-size:13.5px;margin-bottom:14px;display:none;}
+  .msg{padding:12px 14px;border-radius:9px;font-size:16.2px;margin-bottom:14px;display:none;}
   .msg.show{display:block;}
   .msg.error{background:#FDECEA;color:var(--danger);border:1px solid #F4C2BA;}
   .msg.success{background:#EAF5F1;color:#2E6D5F;border:1px solid #BFE3D6;}
 
   .gauge-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
   .gauge{width:120px;height:120px;flex-shrink:0;}
-  .gauge-text{font-family:var(--font-display);font-size:34px;font-weight:600;}
-  .band-tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;color:#fff;}
+  .gauge-text{font-family:var(--font-display);font-size:40.8px;font-weight:600;}
+  .band-tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:14.4px;font-weight:700;color:#fff;}
 
   .required:after{content:" *";color:var(--dawn-deep);}
-  .hint{font-size:12px;color:var(--ink-soft);margin:-8px 0 14px;}
+  .hint{font-size:14.4px;color:var(--ink-soft);margin:-8px 0 14px;}
 </style>
 </head>
 <body>
@@ -171,9 +174,9 @@
       <fieldset>
         <legend class="required">您平常睡眠困難是屬於哪一類型？（可複選）</legend>
         <div class="check-row" id="isi-sleeptype-group">
-          <div class="check"><input type="checkbox" value="難入睡" id="st-1"><label for="st-1">難入睡</label></div>
-          <div class="check"><input type="checkbox" value="多夢/淺眠" id="st-2"><label for="st-2">多夢/淺眠</label></div>
-          <div class="check"><input type="checkbox" value="早醒再難入睡" id="st-3"><label for="st-3">早醒再難入睡</label></div>
+          <div class="check check--1"><input type="checkbox" value="難入睡" id="st-1"><label for="st-1">難入睡</label></div>
+          <div class="check check--2"><input type="checkbox" value="多夢/淺眠" id="st-2"><label for="st-2">多夢/淺眠</label></div>
+          <div class="check check--3"><input type="checkbox" value="早醒難再入睡" id="st-3"><label for="st-3">早醒難再入睡</label></div>
         </div>
       </fieldset>
 
@@ -184,7 +187,7 @@
         <textarea id="isi-feeling" placeholder="請描述穿著平衡衣期間的睡眠或身體感受變化"></textarea>
       </label>
 
-      <button class="btn" id="isi-submit">送出評估</button>
+      <button class="btn" id="isi-submit">送出</button>
     </div>
 
     <div class="card" id="isi-result-card" style="display:none;">
@@ -193,7 +196,7 @@
         <svg class="gauge" viewBox="0 0 120 120" id="isi-gauge"></svg>
         <div>
           <div class="gauge-text" id="isi-score-text">0</div>
-          <div style="color:var(--ink-soft);font-size:12.5px;margin-bottom:6px;">總分（0–28）</div>
+          <div style="color:var(--ink-soft);font-size:15px;margin-bottom:6px;">總分（0–28）</div>
           <span class="band-tag" id="isi-band-tag">—</span>
         </div>
       </div>
@@ -214,7 +217,7 @@
   const NOT_CONFIGURED = !SCRIPT_URL || SCRIPT_URL.indexOf('PASTE_YOUR') === 0;
   if (NOT_CONFIGURED) {
     const warn = document.createElement('div');
-    warn.style.cssText = 'background:#D9553F;color:#fff;padding:12px 20px;font-size:13.5px;text-align:center;';
+    warn.style.cssText = 'background:#D9553F;color:#fff;padding:12px 20px;font-size:16.2px;text-align:center;';
     warn.textContent = '尚未設定 SCRIPT_URL：請在 index.html 中把 Google Apps Script 網頁應用程式網址填入，否則資料無法送出。';
     document.body.insertBefore(warn, document.body.firstChild);
   }
@@ -362,7 +365,7 @@
       console.error(e);
       showMsg(msgEl, '儲存失敗，請檢查網路或後台設定後重試', 'error');
     }finally{
-      submitBtn.disabled = false; submitBtn.textContent = '送出評估';
+      submitBtn.disabled = false; submitBtn.textContent = '送出';
     }
   });
 
