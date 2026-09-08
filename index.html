@@ -59,7 +59,7 @@
 
   label.field{display:block;margin-bottom:14px;}
   label.field span.lbl{display:block;font-size:17.16px;font-weight:700;color:var(--ink);margin-bottom:6px;}
-  input[type=text],input[type=date],textarea{
+  input[type=text],input[type=date],select,textarea{
     width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;
     font-family:var(--font-body);font-size:18.48px;color:var(--ink);background:#fff;
   }
@@ -151,14 +151,28 @@
 
       <div class="grid2">
         <label class="field">
-          <span class="lbl required">姓名</span>
-          <input type="text" id="isi-name" placeholder="例：王小明 ">
+          <span class="lbl required">姓名或測試編號</span>
+          <input type="text" id="isi-name" placeholder="例：王小明 / T003">
         </label>
         <label class="field">
           <span class="lbl required">填寫日期</span>
           <input type="date" id="isi-date">
         </label>
       </div>
+
+      <label class="field">
+        <span class="lbl required">年齡</span>
+        <select id="isi-age">
+          <option value="">請選擇</option>
+          <option value="20歲以下">20歲以下</option>
+          <option value="20-29歲">20-29歲</option>
+          <option value="30-39歲">30-39歲</option>
+          <option value="40-49歲">40-49歲</option>
+          <option value="50-59歲">50-59歲</option>
+          <option value="60-69歲">60-69歲</option>
+          <option value="70歲以上">70歲以上</option>
+        </select>
+      </label>
 
       <div class="field">
         <span class="lbl required">測試階段</span>
@@ -322,10 +336,12 @@
     if(NOT_CONFIGURED){ showMsg(msgEl,'尚未設定後台網址（SCRIPT_URL），無法送出','error'); return; }
     const name = $('isi-name').value.trim();
     const date = $('isi-date').value;
+    const age = $('isi-age').value;
     const stage = selectedStage;
 
     if(!name){ showMsg(msgEl,'請輸入姓名或測試編號','error'); return; }
     if(!date){ showMsg(msgEl,'請選擇填寫日期','error'); return; }
+    if(!age){ showMsg(msgEl,'請選擇年齡','error'); return; }
     if(!stage){ showMsg(msgEl,'請選擇測試階段（前測／後測）','error'); return; }
 
     const sleepTypeChecks = Array.from(document.querySelectorAll('#isi-sleeptype-group input:checked')).map(c=>c.value);
@@ -347,7 +363,7 @@
     const score = Object.values(answers).reduce((a,b)=>a+b,0);
     const band = getISIBand(score);
     const entry = Object.assign(
-      { id: uid(), name, date, stage, sleepType: sleepTypeChecks.join('、'), score, level: band.label, feeling, submittedAt: new Date().toISOString() },
+      { id: uid(), name, date, age, stage, sleepType: sleepTypeChecks.join('、'), score, level: band.label, feeling, submittedAt: new Date().toISOString() },
       answers
     );
 
